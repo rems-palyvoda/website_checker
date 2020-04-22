@@ -2,9 +2,11 @@
 
 require 'faraday'
 require 'csv'
-require 'uri'
+require 'pry'
+require './lib/url_validator'
 
 # Faraday.default_adapter = :typhoeus
+# CSV.open('test.csv', 'a') { |csv| csv << ['2', 'test'] }
 
 class WebsiteChecker
   attr_reader :file
@@ -15,7 +17,7 @@ class WebsiteChecker
 
   def call
     file.each do |row|
-      url = row['URL']
+      url = validate_url(row['URL'])
       response = Faraday.get(url)
       puts "url: #{url}"
       puts "response status: #{response.status}"
@@ -26,6 +28,9 @@ class WebsiteChecker
       puts "#{url} error: #{e.message}"
     end
   end
+
+  def validate_url(url)
+    UrlValidator.new(url).prepare
+  end
 end
 
-WebsiteChecker.new.call

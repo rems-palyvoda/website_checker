@@ -1,2 +1,5 @@
 To run tests:
-rake test
+```rake test```
+
+To run script:
+```rake run```
