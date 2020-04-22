@@ -4,6 +4,6 @@ module CsvSaver
   end
 
   def self.parse_response(res)
-    [res.env.url, res.status, res.reason_phrase]
+    [res[:url], res[:status], res[:reason_phrase], res[:error]]
   end
 end

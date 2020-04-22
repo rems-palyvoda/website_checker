@@ -5,6 +5,7 @@ require 'csv'
 require 'pry'
 require './lib/url_validator'
 require './lib/csv_saver'
+require './lib/response_handler'
 
 # Faraday.default_adapter = :typhoeus
 
@@ -13,7 +14,7 @@ class WebsiteChecker
 
   include CsvSaver
 
-  RESULT_HEADERS = %w(url status phrase)
+  RESULT_HEADERS = %w(url status phrase error)
 
   def initialize
     @source_file = CSV.parse(File.read('websites_to_check.csv'), headers: true)
@@ -22,17 +23,13 @@ class WebsiteChecker
 
   def call
     source_file.each do |row|
-      url = validate_url(row['URL'])
-      response = Faraday.get(url)
+      url = prepare_url(row['URL'])
+      response = ResponseHandler.new(url).to_h
       CsvSaver.save(result_file, response)
-    rescue Faraday::TimeoutError => e
-      puts "#{url} error: #{e.message}"
-    rescue Faraday::ConnectionFailed => e
-      puts "#{url} error: #{e.message}"
     end
   end
 
-  def validate_url(url)
+  def prepare_url(url)
     UrlValidator.new(url).prepare
   end
 
@@ -42,4 +39,3 @@ class WebsiteChecker
     filename
   end
 end
-
