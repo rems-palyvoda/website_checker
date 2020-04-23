@@ -1,7 +1,7 @@
 module App
   class FaradayClient < BaseClient
 
-    HEADERS = %w(url status phrase error).freeze
+    HEADERS = %i(url status reason_phrase error).freeze
 
     def run
       Faraday.get(url)
@@ -10,6 +10,7 @@ module App
     end
 
     def to_h
+      @parsed = HEADERS.inject({}){|memo, el| memo[el] = nil; memo}
       @parsed[:url] = url
 
       if response.is_a? Faraday::Response

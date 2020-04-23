@@ -21,18 +21,31 @@ end
 
 task :interactive do
   options = {}
+
   puts 'Enter source filename: '
   options[:source_file] = STDIN.gets.strip
-  puts 'Enter default scheme (1: http / 2: https): '
+
+  puts 'Enter default scheme (1: http | 2: https): '
   options[:scheme] = case STDIN.gets.strip
-                             when '1'
-                               'http://'
-                             when '2'
-                               'https://'
-                             else
-                               puts 'Your value is invalid'
-                               exit
-                             end
+                     when '1'
+                       'http://'
+                     when '2'
+                       'https://'
+                     else
+                       puts 'Your value is invalid'
+                       exit
+                     end
+
+  puts 'Select http client: (1: Faraday | 2: Typhoeus)'
+  options[:http_client] = case STDIN.gets.strip
+                          when '1'
+                            'Faraday'
+                          when '2'
+                            'Typhoeus'
+                          else
+                            puts 'Your value is invalid'
+                            exit
+                          end
 
   Rake::Task[:run].invoke(options)
 end

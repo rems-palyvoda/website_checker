@@ -15,5 +15,9 @@ module App
     def to_h
       raise 'not implemented yet'
     end
+
+    def to_a
+      to_h.values
+    end
   end
 end
