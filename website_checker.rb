@@ -4,7 +4,8 @@ require 'faraday'
 require 'csv'
 require './lib/url_validator'
 require './lib/csv_saver'
-require './lib/response_handler'
+require './lib/clients/base_client'
+require './lib/clients/faraday_client'
 
 require 'pry'
 
@@ -15,7 +16,6 @@ module App
 
     include CsvSaver
 
-    RESULT_HEADERS = %w(url status phrase error).freeze
     DEFAULT_FILE_NAME = 'websites_to_check.csv'.freeze
 
     def initialize
@@ -33,10 +33,12 @@ module App
     def call
       source_file.each do |row|
         url = prepare_url(row['URL'])
-        response = ResponseHandler.new(url).to_h
+        response = http_client.new(url).to_h
         CsvSaver.save(result_file, response)
       end
     end
+
+    private
 
     def prepare_url(url)
       UrlValidator.new(url).prepare
@@ -44,8 +46,19 @@ module App
 
     def create_result_file
       filename = "#{Time.now}_responses.csv"
-      CSV.open(filename, 'w') { |csv| csv << RESULT_HEADERS }
+      CSV.open(filename, 'w') { |csv| csv << http_client::HEADERS }
       filename
+    end
+
+    def http_client
+      @client ||= case App.preferences[:http_client]
+                  when 'Faraday'
+                    FaradayClient
+                  when 'Typhoeus'
+                    TyphoeusClient
+                  else
+                    FaradayClient # suppose as default
+                  end
     end
   end
 end

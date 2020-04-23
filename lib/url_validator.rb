@@ -8,14 +8,6 @@ module App
       @url = url
     end
 
-    def has_scheme?
-      url.start_with?('https://') || url.start_with?('http://')
-    end
-
-    def add_scheme
-      @url = has_scheme? ? url : "#{scheme}#{url}"
-    end
-
     def valid?
       !!(url =~ /\A#{URI::regexp}\z/)
     end
@@ -29,6 +21,16 @@ module App
 
     def to_s
       prepare
+    end
+
+    private
+
+    def has_scheme?
+      url.start_with?('https://') || url.start_with?('http://')
+    end
+
+    def add_scheme
+      @url = has_scheme? ? url : "#{scheme}#{url}"
     end
 
     def scheme

@@ -1,12 +1,7 @@
 module App
-  class ResponseHandler
-    attr_reader :url, :response, :parsed
+  class FaradayClient < BaseClient
 
-    def initialize(url)
-      @url = url
-      @response = run
-      @parsed = {}
-    end
+    HEADERS = %w(url status phrase error).freeze
 
     def run
       Faraday.get(url)
