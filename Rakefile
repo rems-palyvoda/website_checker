@@ -1,4 +1,5 @@
 require './website_checker'
+require './lib/preferences'
 
 task :test do
   Dir.glob('./test/*_test.rb').each { |file| require file}
@@ -6,7 +7,9 @@ end
 
 task :run, [:options] do |t, args|
   puts args[:options]
-  service = WebsiteChecker.new(args[:options])
+  App.set_preferences(args[:options])
+
+  service = App::WebsiteChecker.new
   puts "Going to check #{service.source_file.size} sites..."
   start_time = Time.now
   service.call

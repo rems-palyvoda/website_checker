@@ -8,4 +8,4 @@ TO DO:
 - Follow at least one redirect
 - Test on sites with timeout
 - Feed script big amount of site
-- app options as singleton object
+- good file requiring

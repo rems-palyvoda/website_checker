@@ -3,13 +3,13 @@ require './lib/response_handler'
 
 class TestResponseHandler < Minitest::Test
   def test_run
-    assert_instance_of Faraday::Response, ResponseHandler.new('http://google.com').run
-    assert_instance_of Faraday::ConnectionFailed, ResponseHandler.new('google.com').run
+    assert_instance_of Faraday::Response, App::ResponseHandler.new('http://google.com').run
+    assert_instance_of Faraday::ConnectionFailed, App::ResponseHandler.new('google.com').run
   end
 
   describe '.to_h' do
     describe 'when valid url' do
-      subject = ResponseHandler.new('valid_url')
+      subject = App::ResponseHandler.new('valid_url')
 
       # stub an object that is returned by Faraday in case of valid url
       def subject.response
@@ -23,7 +23,7 @@ class TestResponseHandler < Minitest::Test
     end
 
     describe 'when invalid url' do
-      subject = ResponseHandler.new('invalid_url')
+      subject = App::ResponseHandler.new('invalid_url')
 
       # stub an object that is returned by Faraday in case of invalid url
       def subject.response
