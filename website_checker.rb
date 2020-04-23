@@ -2,7 +2,6 @@
 
 require 'faraday'
 require 'csv'
-require 'pry'
 require './lib/url_validator'
 require './lib/csv_saver'
 require './lib/response_handler'
