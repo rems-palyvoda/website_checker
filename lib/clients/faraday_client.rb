@@ -4,7 +4,8 @@ module App
     HEADERS = %i(url status reason_phrase error).freeze
 
     def run
-      Faraday.get(url)
+      connection = Faraday::Connection.new(nil, ssl: {verify: false})
+      connection .get(url)
     rescue Faraday::ConnectionFailed => e
       e
     end
