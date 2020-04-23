@@ -18,7 +18,7 @@ class TestFaradayClient < Minitest::Test
 
       it 'must responds hash with suitable keys' do
         _(subject.to_h).must_be_instance_of Hash
-        _(subject.to_h.keys).must_equal [:url, :status, :reason_phrase]
+        _(subject.to_h.keys).must_equal [:url, :status, :reason_phrase, :error]
       end
     end
 
@@ -32,7 +32,7 @@ class TestFaradayClient < Minitest::Test
 
       it 'must responds hash with suitable keys' do
         _(subject.to_h).must_be_instance_of Hash
-        _(subject.to_h.keys).must_equal [:url, :error]
+        _(subject.to_h.keys).must_equal [:url, :status, :reason_phrase, :error]
       end
     end
   end

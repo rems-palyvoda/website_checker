@@ -15,10 +15,6 @@ module App
       first_condition && second_condition
     end
 
-    def to_s
-      prepare
-    end
-
     private
 
     def has_scheme?
