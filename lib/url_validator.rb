@@ -1,5 +1,7 @@
 module App
   class UrlValidator
+    DEFAULT_SCHEME = 'https://'.freeze
+
     attr_reader :url
 
     def initialize(url)
@@ -10,8 +12,8 @@ module App
       url.start_with?('https://') || url.start_with?('http://')
     end
 
-    def add_default_scheme
-      @url = has_scheme? ? url : "http://#{url}"
+    def add_scheme
+      @url = has_scheme? ? url : "#{scheme}#{url}"
     end
 
     def valid?
@@ -21,12 +23,16 @@ module App
     def prepare
       return url if valid?
 
-      add_default_scheme unless has_scheme?
+      add_scheme unless has_scheme?
       url if valid?
     end
 
     def to_s
       prepare
+    end
+
+    def scheme
+      App.preferences[:scheme] || DEFAULT_SCHEME
     end
   end
 end

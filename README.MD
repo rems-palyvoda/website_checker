@@ -6,6 +6,6 @@ To run script:
 
 TO DO:
 - Follow at least one redirect
-- Test on sites with timeout
+- Test one sites with timeout
 - Feed script big amount of site
 - good file requiring

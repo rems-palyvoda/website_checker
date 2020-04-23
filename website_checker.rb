@@ -15,10 +15,11 @@ module App
 
     include CsvSaver
 
-    RESULT_HEADERS = %w(url status phrase error)
+    RESULT_HEADERS = %w(url status phrase error).freeze
+    DEFAULT_FILE_NAME = 'websites_to_check.csv'.freeze
 
     def initialize
-      @source_file = CSV.parse(File.read('websites_to_check.csv'), headers: true)
+      @source_file = open_source_file(App.preferences[:source_file] || DEFAULT_FILE_NAME)
       @result_file = create_result_file
     end
 
