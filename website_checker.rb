@@ -32,8 +32,9 @@ module App
 
     def call
       source_file.each do |row|
-        url = prepare_url(row['URL'])
-        response = http_client.new(url)
+        url_validator = App::UrlValidator.new(row['URL'])
+        next unless url_validator.valid?
+        response = http_client.new(url_validator.url)
         CsvSaver.save(result_file, response)
       end
     end

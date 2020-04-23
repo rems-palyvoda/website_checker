@@ -9,14 +9,10 @@ module App
     end
 
     def valid?
-      !!(url =~ /\A#{URI::regexp}\z/)
-    end
-
-    def prepare
-      return url if valid?
-
       add_scheme unless has_scheme?
-      url if valid?
+      first_condition = !!(url =~ /\A#{URI::regexp}\z/)
+      second_condition = URI(url).respond_to?(:request_uri)
+      first_condition && second_condition
     end
 
     def to_s
@@ -26,7 +22,7 @@ module App
     private
 
     def has_scheme?
-      url.start_with?('https://') || url.start_with?('http://')
+      !!URI(url).scheme
     end
 
     def add_scheme
@@ -34,7 +30,9 @@ module App
     end
 
     def scheme
-      App.preferences[:scheme] || DEFAULT_SCHEME
+      return DEFAULT_SCHEME unless App.preferences
+      return DEFAULT_SCHEME unless App.preferences[:scheme]
+      App.preferences[:scheme]
     end
   end
 end
